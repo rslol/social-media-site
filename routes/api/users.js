@@ -16,9 +16,9 @@ const   express                 = require('express'),
 // @access  Public
 router.get('/test', (req, res) => res.json({msg: "Users Works"}));
 
-    // @route   Get api/users/register
-    // @desc    Test users Route
-    // @access  Public
+// @route   Get api/users/register
+// @desc    Test users Route
+// @access  Public
 router.post('/register', (req, res) => {
     const { err, isValid } = validateRegisterInput(req.body);
 

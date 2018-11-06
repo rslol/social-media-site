@@ -1,10 +1,11 @@
-const   express         = require('express'),
-        router          = express.Router(),
-        mongoose        = require('mongoose'),
-        passport        = require('passport'),
+const   express                 = require('express'),
+        router                  = express.Router(),
+        mongoose                = require('mongoose'),
+        passport                = require('passport'),
         // Load DB Models
-        Profile         = require('../../models/Profile'),
-        User            = require('../../models/User');
+        Profile                 = require('../../models/Profile'),
+        validateProfileInput    = require('../../validation/profile');
+
 
 // @route   Get api/profile/test
 // @desc    Test profile Route
@@ -18,24 +19,86 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
     const err = {};  
     // We want to get the user profile from the token
     Profile.findOne({ user: req.user.id })
+        .populate('users', ['name', 'avatar'])
         .then(profile => {
             if(!profile) {
                 err.noprofile = 'No profile for this user';
-                res.status(404).json(err);
+                return res.status(404).json(err);
             } 
             res.json(profile);
         })
         .catch(err => res.status(404).json(err));
 });
 
+// @route   GET api/profile/handle/:handle
+// @desc    Get profile by handle
+// @access  Public
+router.get('/handle/:handle', (req, res) => {
+    const err = {};
+    // req.params.handle targets the /:handle in the url
+    // Since /:handle is unique to the user, thats how we get the user profile
+    Profile.findOne({ handle: req.params.handle })
+        .populate('user', ['name', 'avatar'])
+        .then(profile => {
+            if(!profile) {
+                err.noprofile = 'This profile does not exist';
+                return res.status(404).json(err);
+            }
+            res.json(profile);
+        })
+        .catch(err => res.status(404).json(err));
+});
+
+// @route   GET api/profile/user/:user_id
+// @desc    Get profile by user id
+// @access  Public
+router.get('/user/:user_id', (req, res) => {
+    const err = {};
+    Profile.findOne({ handle: req.params.user_id })
+        .populate('user', ['name', 'avatar'])
+        .then(profile => {
+            if(!profile) {
+                err.noprofile = 'This profile does not exist';
+                return res.status(404).json(err);
+            }
+            res.json(profile);
+        })
+        .catch(err => res.status(404).json({ profile: 'This profile does not exist' }));
+});
+
+
+// @route   GET api/profile/all
+// @desc    Get all profiles
+// @access  Public
+routner.get('/all', (req, res) => {
+    const err = {};
+    Profile.find()
+    .populate('user', ['name', 'avatar'])
+    .then(profiles => {
+        if(!profiles) {
+            err.noprofiles = 'No profiles were found';
+            return res.status(404).json(err);
+        }
+        res.json(profiles);
+    })
+    .catch(err => res.statsus(404).json({ profiles: 'No profiles were found'}));
+})
+
+
 // @route   POST api/profile
 // @desc    Create or Edit User Profile
 // @access  Private
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res) => { 
+    const  { err, isValid } = validateProfileInput(req.body);
+    // Check validation
+    if(!isValid) {
+        // Return Error with 400 status
+        return res.status(400).json(err)
+    }
     // Get fields
     const profileFields = {};
     profileFields.user = req.user.id;
-    // if single, no curly brances needed
+    // If if statement is a single line, no curly brances needed
     if(req.body.handle) profileFields.handle = req.body.handle;
     if(req.body.company) profileFields.company = req.body.company;
     if(req.body.website) profileFields.website = req.body.website;
@@ -71,7 +134,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
                 Profile.findOne({ handle: profileFields.handle }).then(profile => {
                     if(profile) {
                         errors.handle = 'That handle already exist';
-                        res.status(400).json(err);
+                        return res.status(400).json(err);
                     }
                     // Save Profile 
                     new Profile(profileFields).save().then(profile => res.json(profile));
