@@ -13,7 +13,7 @@ const   express                 = require('express'),
 // @route   Get api/profile/test
 // @desc    Test profile Route
 // @access  Public
-router.get('/test', (req, res) => res.json({msg: "Profile Works"}));
+router.get('/test', (req, res) => res.json({ msg: "Profile Works" }));
 
 // @route   Get api/profile
 // @desc    Get current users profile
