@@ -16,7 +16,7 @@ const   express                 = require('express'),
 // @access  Public
 router.get('/test', (req, res) => res.json({msg: "Users Works"}));
 
-// @route   Get api/users/register
+// @route   POST api/users/register
 // @desc    Test users Route
 // @access  Public
 router.post('/register', (req, res) => {
@@ -49,20 +49,18 @@ router.post('/register', (req, res) => {
                 //How to hash passwords with bcrypt
                 bcrypt.genSalt(10, (err, salt) => {
                     bcrypt.hash(newUser.password, salt, (err, hash) => {
-                        if (err) {
-                            console.log(err);
-                        }
+                        if (err) throw err;
                         newUser.password = hash;
                         newUser.save()
                             .then(user => res.json(user))
-                            .catch(err => console.log(err))
-                    })
-                })
+                            .catch(err => console.log(err));
+                    });
+                });
             }
-        })
+        });
 });
 
-// @route   Get api/users/login
+// @route   POST api/users/login
 // @desc    Login User / Return JWT Token
 // @access  Public
 router.post('/login', (req, res) => {
