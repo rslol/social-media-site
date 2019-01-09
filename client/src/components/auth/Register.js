@@ -11,13 +11,13 @@ class Register extends Component {
             password2: '',
             errors: {}
         }
-
+        // bind 'this' to the functions
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
     }
 
     onChange(e) {
-        // Target the name and assign the state to whatever the user is typing
+        // Take whatever the user inputs and update the component state with it
         this.setState({[e.target.name]: e.target.value});
     }
 
@@ -30,6 +30,7 @@ class Register extends Component {
             password2: this.state.password2
         };
 
+        console.log(newUser);
         axios.post('/api/users/register', newUser)
             .then(res => console.log(res.data))
             .catch(err => console.log(err.response.data));
@@ -43,6 +44,7 @@ class Register extends Component {
                         <div className="col-md-8 m-auto">
                             <h1 className="display-4 text-center">Sign Up</h1>
                             <p className="lead text-center">Create your account</p>
+                            {/* value is how you link the input field to the component state */}
                             <form onSubmit={this.onSubmit}>
                                 <div className="form-group">
                                     <input type="text" className="form-control form-control-lg" placeholder="Name" name="name" value={this.state.name} onChange={this.onChange} />

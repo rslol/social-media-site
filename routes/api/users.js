@@ -50,14 +50,12 @@ router.post('/register', (req, res) => {
                 //How to hash passwords with bcrypt
                 bcrypt.genSalt(10, (err, salt) => {
                     bcrypt.hash(newUser.password, salt, (err, hash) => {
-                        if(err) {
-                            console.log(err);
-                        } else {
+                        console.log(newUser);
+                        if(err) throw err;
                         newUser.password = hash;
                         newUser.save()
                             .then(user => res.json(user))
                             .catch(err => console.log(err));
-                        }
                     });
                 });
             }
