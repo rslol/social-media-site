@@ -4,7 +4,7 @@ const isEmpty   = require('./is-empty');
 module.exports = function validateRegisterInput(data) {
     let err = {};
 
-    // if data.(type) is not empty, return data.(type), else if data.(type) is emprty, return an empty string
+    // if data(type) is not empty, return data.(type), else if data.(type) is emprty, return an empty string
     data.name = !isEmpty(data.name) ? data.name : '';
     data.email = !isEmpty(data.email) ? data.email : '';
     data.password = !isEmpty(data.password) ? data.password : '';
@@ -33,7 +33,7 @@ module.exports = function validateRegisterInput(data) {
         err.password = 'Password is required';
     }    
 
-    if(!Validator.isLength(data.passowrd, { min: 6, max: 30})){
+    if(!Validator.isLength(data.password, { min: 6, max: 30})){
         err.password = 'Password length needs to be between 6-30 characters';
     }
 

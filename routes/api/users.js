@@ -1,14 +1,15 @@
-const   express                 = require('express'),
-        router                  = express.Router(),
-        User                    = require('../../models/User'),
-        gravatar                = require('gravatar'),
-        bcrypt                  = require('bcryptjs'),
-        jwt                     = require('jsonwebtoken'),
-        key                     = require('../../config/keys'),
-        passport                = require('passport'),
-        // Load Input Validation
-        validateRegisterInput   = require('../../validation/register'),
-        validateLoginInput      = require('../../validation/login');
+const   
+    express                 = require('express'),
+    router                  = express.Router(),
+    User                    = require('../../models/User'),
+    gravatar                = require('gravatar'),
+    bcrypt                  = require('bcryptjs'),
+    jwt                     = require('jsonwebtoken'),
+    key                     = require('../../config/keys'),
+    passport                = require('passport'),
+    // Load Input Validation
+    validateRegisterInput   = require('../../validation/register'),
+    validateLoginInput      = require('../../validation/login');
 
 
 // @route   Get api/users/test
@@ -49,11 +50,14 @@ router.post('/register', (req, res) => {
                 //How to hash passwords with bcrypt
                 bcrypt.genSalt(10, (err, salt) => {
                     bcrypt.hash(newUser.password, salt, (err, hash) => {
-                        if (err) throw err;
+                        if(err) {
+                            console.log(err);
+                        } else {
                         newUser.password = hash;
                         newUser.save()
                             .then(user => res.json(user))
                             .catch(err => console.log(err));
+                        }
                     });
                 });
             }
