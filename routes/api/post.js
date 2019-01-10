@@ -1,6 +1,6 @@
 const   express             = require('express'),
         router              = express.Router(),
-        mongoose            = require('mongoos'),
+        mongoose            = require('mongoose'),
         passport            = require('passport'),
         Post                = require('../../models/Post'),
         Profile             = require('../../models/Profile'),

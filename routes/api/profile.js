@@ -73,7 +73,7 @@ router.get('/user/:user_id', (req, res) => {
 // @route   GET api/profile/all
 // @desc    Get all profiles
 // @access  Public
-routner.get('/all', (req, res) => {
+router.get('/all', (req, res) => {
     const err = {};
     Profile.find()
     .populate('user', ['name', 'avatar'])

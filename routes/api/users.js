@@ -1,14 +1,15 @@
-const   express                 = require('express'),
-        router                  = express.Router(),
-        User                    = require('../../models/User'),
-        gravatar                = require('gravatar'),
-        bcrypt                  = require('bcryptjs'),
-        jwt                     = require('jsonwebtoken'),
-        key                     = require('../../config/keys'),
-        passport                = require('passport'),
-        // Load Input Validation
-        validateRegisterInput   = require('../../validation/register'),
-        validateLoginInput      = require('../../validation/login');
+const   
+    express                 = require('express'),
+    router                  = express.Router(),
+    User                    = require('../../models/User'),
+    gravatar                = require('gravatar'),
+    bcrypt                  = require('bcryptjs'),
+    jwt                     = require('jsonwebtoken'),
+    key                     = require('../../config/keys'),
+    passport                = require('passport'),
+    // Load Input Validation
+    validateRegisterInput   = require('../../validation/register'),
+    validateLoginInput      = require('../../validation/login');
 
 
 // @route   Get api/users/test
@@ -16,7 +17,7 @@ const   express                 = require('express'),
 // @access  Public
 router.get('/test', (req, res) => res.json({msg: "Users Works"}));
 
-// @route   Get api/users/register
+// @route   POST api/users/register
 // @desc    Test users Route
 // @access  Public
 router.post('/register', (req, res) => {
@@ -49,20 +50,19 @@ router.post('/register', (req, res) => {
                 //How to hash passwords with bcrypt
                 bcrypt.genSalt(10, (err, salt) => {
                     bcrypt.hash(newUser.password, salt, (err, hash) => {
-                        if (err) {
-                            console.log(err);
-                        }
+                        console.log(newUser);
+                        if(err) throw err;
                         newUser.password = hash;
                         newUser.save()
                             .then(user => res.json(user))
-                            .catch(err => console.log(err))
-                    })
-                })
+                            .catch(err => console.log(err));
+                    });
+                });
             }
-        })
+        });
 });
 
-// @route   Get api/users/login
+// @route   POST api/users/login
 // @desc    Login User / Return JWT Token
 // @access  Public
 router.post('/login', (req, res) => {
