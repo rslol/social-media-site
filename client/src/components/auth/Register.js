@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import classnames from 'classnames';
 
 class Register extends Component {
     constructor(props) {
@@ -30,13 +31,15 @@ class Register extends Component {
             password2: this.state.password2
         };
 
-        console.log(newUser);
         axios.post('/api/users/register', newUser)
             .then(res => console.log(res.data))
             .catch(err => console.log(err.response.data));
     }
 
     render() {
+        const { errors } = this.state;
+        const classes = 'form-control form-control-lg';
+
         return (
             <div className="register">
                 <div className="container">
@@ -47,17 +50,18 @@ class Register extends Component {
                             {/* value is how you link the input field to the component state */}
                             <form onSubmit={this.onSubmit}>
                                 <div className="form-group">
-                                    <input type="text" className="form-control form-control-lg" placeholder="Name" name="name" value={this.state.name} onChange={this.onChange} />
+                                    <input type="text" className={classnames(classes, {'is-invalid': errors.name})} placeholder="Name" name="name" value={this.state.name} onChange={this.onChange} />
+                                    {errors.name && (<div className="invalid-feedback">{errors.name}</div>)}
                                 </div>
                                 <div className="form-group">
-                                    <input type="email" className="form-control form-control-lg" placeholder="Email Address" name="email" value={this.state.email} onChange={this.onChange} />
+                                    <input type="email" className={classnames(classes, {'is-invalid': errors.name})} placeholder="Email Address" name="email" value={this.state.email} onChange={this.onChange} />
                                     <small className="form-text text-muted">This site uses Gravatar so if you want a profile image, use a Gravatar email</small>
                                 </div>
                                 <div className="form-group">
-                                    <input type="password" className="form-control form-control-lg" placeholder="Password" name="password" value={this.state.password} onChange={this.onChange} />
+                                    <input type="password" className={classnames(classes, {'is-invalid': errors.name})} placeholder="Password" name="password" value={this.state.password} onChange={this.onChange} />
                                 </div>
                                 <div className="form-group">
-                                    <input type="password" className="form-control form-control-lg" placeholder="Confirm Password" name="password2" value={this.state.password2} onChange={this.onChange} />
+                                    <input type="password" className={classnames(classes, {'is-invalid': errors.name})} placeholder="Confirm Password" name="password2" value={this.state.password2} onChange={this.onChange} />
                                 </div>
                                     <input type="submit" className="btn btn-info btn-block mt-4" />
                             </form>

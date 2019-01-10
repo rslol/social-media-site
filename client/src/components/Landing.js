@@ -18,6 +18,7 @@ class Landing extends Component {
                             <div className="col-sm-12 col-md-6 text-center">
                                 <h4 className="display-3 mb-4">Me</h4>
                                 <p className="lead">My Personal Portfolio</p>
+                                <hr />
                                 <Link className="btn btn-lg btn-info mr-2" to="/me">Portfolio</Link>
                             </div>
                         </div>
