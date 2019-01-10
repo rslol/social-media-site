@@ -33,12 +33,11 @@ class Register extends Component {
 
         axios.post('/api/users/register', newUser)
             .then(res => console.log(res.data))
-            .catch(err => console.log(err.response.data));
+            .catch(err => this.setState({ errors: err.response.data }));
     }
 
     render() {
         const { errors } = this.state;
-        const classes = 'form-control form-control-lg';
 
         return (
             <div className="register">
@@ -50,18 +49,21 @@ class Register extends Component {
                             {/* value is how you link the input field to the component state */}
                             <form onSubmit={this.onSubmit}>
                                 <div className="form-group">
-                                    <input type="text" className={classnames(classes, {'is-invalid': errors.name})} placeholder="Name" name="name" value={this.state.name} onChange={this.onChange} />
+                                    <input type="text" className={classnames('form-control form-control-lg', {'is-invalid': errors.name})} placeholder="Name" name="name" value={this.state.name} onChange={this.onChange} />
                                     {errors.name && (<div className="invalid-feedback">{errors.name}</div>)}
                                 </div>
                                 <div className="form-group">
-                                    <input type="email" className={classnames(classes, {'is-invalid': errors.name})} placeholder="Email Address" name="email" value={this.state.email} onChange={this.onChange} />
+                                    <input type="email" className={classnames('form-control form-control-lg', {'is-invalid': errors.name})} placeholder="Email Address" name="email" value={this.state.email} onChange={this.onChange} />
                                     <small className="form-text text-muted">This site uses Gravatar so if you want a profile image, use a Gravatar email</small>
+                                    {errors.name && (<div className="invalid-feedback">{errors.name}</div>)}
                                 </div>
                                 <div className="form-group">
-                                    <input type="password" className={classnames(classes, {'is-invalid': errors.name})} placeholder="Password" name="password" value={this.state.password} onChange={this.onChange} />
+                                    <input type="password" className={classnames('form-control form-control-lg', {'is-invalid': errors.name})} placeholder="Password" name="password" value={this.state.password} onChange={this.onChange} />
+                                    {errors.name && (<div className="invalid-feedback">{errors.name}</div>)}
                                 </div>
                                 <div className="form-group">
-                                    <input type="password" className={classnames(classes, {'is-invalid': errors.name})} placeholder="Confirm Password" name="password2" value={this.state.password2} onChange={this.onChange} />
+                                    <input type="password" className={classnames('form-control form-control-lg', {'is-invalid': errors.name})} placeholder="Confirm Password" name="password2" value={this.state.password2} onChange={this.onChange} />
+                                    {errors.name && (<div className="invalid-feedback">{errors.name}</div>)}
                                 </div>
                                     <input type="submit" className="btn btn-info btn-block mt-4" />
                             </form>
